@@ -263,7 +263,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   trajectoryRenderer: {fileID: 919095852}
-  upPower: 5
 --- !u!114 &105503779
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -6,9 +6,10 @@ using UnityEngine;
 public class BallThrower : BallControllerComponent
 {
 	private readonly Vector2 DEFAULT_PULL_VALUE = new Vector2(0, 4);
+	private const float BASE_UP_POWER = 5;
 
 	[SerializeField] private TrajectoryRenderer trajectoryRenderer;
-	[SerializeField] private float upPower = 5;
+	private float _addedUpPower = 0;
 	private Vector2 _pullVector = Vector2.zero;
 	private bool _isPulling;
 
@@ -22,6 +23,7 @@ public class BallThrower : BallControllerComponent
 		controller.controls.OnDrag += Drag;
 		controller.controls.OnGrabbed += Grab;
 		controller.controls.OnReleased += Release;
+		controller.respawner.OnBallRespawned += BallRespawned;
 	}
 
 	private void LateUpdate()
@@ -44,6 +46,20 @@ public class BallThrower : BallControllerComponent
 	{
 		_pullVector.x += delta.x * 5 * Time.deltaTime;
 		_pullVector.y -= delta.y * 5 * Time.deltaTime;
+		ConstrainPullVector();
+
+		_addedUpPower = _pullVector.y * 0.1f;
+	}
+
+	private void ConstrainPullVector()
+	{
+		float distAdd = _pullVector.y * 0.4f;
+		const float sideMax = 2;
+		if (_pullVector.magnitude < 4) _pullVector = _pullVector.normalized * 4;
+		if (_pullVector.magnitude > 20) _pullVector = _pullVector.normalized * 20;
+		if (_pullVector.y < 2) _pullVector.y = 2;
+		if (_pullVector.x < -sideMax - distAdd) _pullVector.x = -sideMax - distAdd;
+		if (_pullVector.x > sideMax + distAdd) _pullVector.x = sideMax + distAdd;
 	}
 
 	private void Grab()
@@ -70,17 +86,40 @@ public class BallThrower : BallControllerComponent
 		controller.currentBall.graphics.SetReleased();
 		ThrowBall();
 		_pullVector = DEFAULT_PULL_VALUE;
+
+		ToggleInput(false);
+	}
+
+	private void ToggleInput(bool inputEnabled)
+	{
+		if (inputEnabled)
+		{
+			controller.controls.OnDrag += Drag;
+			controller.controls.OnGrabbed += Grab;
+			controller.controls.OnReleased += Release;
+		}
+		else
+		{
+			controller.controls.OnDrag -= Drag;
+			controller.controls.OnGrabbed -= Grab;
+			controller.controls.OnReleased -= Release;
+		}
 	}
 
 	private void ThrowBall()
 	{
 		OnThrown?.Invoke();
-		controller.currentBall.physics.Throw(new Vector3(_pullVector.x, upPower, _pullVector.y));
+		controller.currentBall.physics.Throw(new Vector3(_pullVector.x, BASE_UP_POWER + _addedUpPower, _pullVector.y));
+	}
+
+	private void BallRespawned(BallEntity entity)
+	{
+		ToggleInput(true);
 	}
 
 	private void UpdateTrajectory()
 	{
 		trajectoryRenderer.transform.position = controller.currentBall.transform.position;
-		trajectoryRenderer.SetVelocity(new Vector3(_pullVector.x, upPower, _pullVector.y));
+		trajectoryRenderer.SetVelocity(new Vector3(_pullVector.x, BASE_UP_POWER +_addedUpPower, _pullVector.y));
 	}
 }

@@ -10,6 +10,8 @@ public class BallRespawner : BallControllerComponent
 
 	[SerializeField] private SpringJoint springJoint;
 
+	public event Action<BallEntity> OnBallRespawned;
+
 	public override void Init(BallController owner)
 	{
 		base.Init(owner);
@@ -40,6 +42,8 @@ public class BallRespawner : BallControllerComponent
 
 			controller.currentBall.physics.SetAnchored();
 			ball.physics.rigidbody.velocity = RESPAWN_VELOCITY;
+
+			OnBallRespawned?.Invoke(ball);
 		}
 	}
 }

@@ -27,7 +27,9 @@ public class TrajectoryRenderer : MonoBehaviour
 		Vector3 cursorPosition = DEFAULT_CURSOR_POSITION;
 		Vector3 cursorNormal = Vector3.up;
 
-		for (int i = 0; i < MAX_ITERATIONS; i++)
+		_positions[0] = ballisticPosition;
+
+		for (int i = 1; i < MAX_ITERATIONS; i++)
 		{
 			var velDelta = ballisticVelocity * Time.fixedDeltaTime;
 
