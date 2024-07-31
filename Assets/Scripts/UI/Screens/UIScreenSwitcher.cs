@@ -13,9 +13,6 @@ public class UIScreenSwitcher : MonoBehaviour, IPreInitialized
 	{
 		switch (state)
 		{
-			case GameStateManager.State.Intro:
-				UIScreenManager.Open<SplashScreen>();
-				break;
 			case GameStateManager.State.MainMenu:
 				UIScreenManager.Open<MainMenuScreen>();
 				break;
@@ -24,6 +21,9 @@ public class UIScreenSwitcher : MonoBehaviour, IPreInitialized
 				break;
 			case GameStateManager.State.LevelComplete:
 				UIScreenManager.Open<LevelCompleteScreen>();
+				break;
+			case GameStateManager.State.LevelFailed:
+				UIScreenManager.Open<LevelFailedScreen>();
 				break;
 		}
 	}

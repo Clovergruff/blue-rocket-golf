@@ -3,31 +3,40 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BallRespawner : BallControllerComponent
+public class BallControllerRespawner : BallControllerComponent
 {
 	private readonly Vector3 RESPAWN_OFFSET = new Vector3(2, -3, 0);
-	private readonly Vector3 RESPAWN_VELOCITY = new Vector3(-10, 0, 0);
 
 	[SerializeField] private SpringJoint springJoint;
 
 	public event Action<BallEntity> OnBallRespawned;
 
-	public override void Init(BallController owner)
+	public override void Init(BallController controller)
 	{
-		base.Init(owner);
+		base.Init(controller);
 
-		owner.thrower.OnThrown += OnThrown;
+		controller.thrower.OnThrown += OnThrown;
 
-		BallHealth.OnBallDestroyed += RespawnBall;
+		StartCoroutine(DelayedInit());
+		IEnumerator DelayedInit()
+		{
+			// Skin a frame to ensure that these events are subscribed after the ball has been set up fully.
+			// This is super hacky, and would be avoided by having a better architecture, but oh well.
+			yield return null;
+			controller.currentBall.health.OnDeath += RespawnBall;
+			controller.currentBall.holeDetector.OnHoleEntered += x => RespawnBall();
+		}
 	}
+
 	private void OnThrown()
 	{
 		springJoint.connectedBody = null;
 		springJoint.gameObject.SetActive(false);
 	}
 
-	private void RespawnBall(BallEntity ball)
+	private void RespawnBall()
 	{
+		var ball = controller.currentBall;
 		StartCoroutine(RespawnSequence());
 
 		IEnumerator RespawnSequence()
@@ -40,9 +49,7 @@ public class BallRespawner : BallControllerComponent
 			yield return null;
 			springJoint.gameObject.SetActive(true);
 
-			controller.currentBall.physics.SetAnchored();
-			ball.physics.rigidbody.velocity = RESPAWN_VELOCITY;
-
+			ball.respawner.Respawn();
 			OnBallRespawned?.Invoke(ball);
 		}
 	}

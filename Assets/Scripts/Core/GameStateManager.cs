@@ -6,7 +6,6 @@ public class GameStateManager : MonoBehaviour
 {
 	public enum State
 	{
-		Intro,
 		MainMenu,
 		Gameplay,
 		LevelComplete,
@@ -18,7 +17,7 @@ public class GameStateManager : MonoBehaviour
 	public static event Action OnLevelFailed;
 	public static State CurrentState {get; private set;}
 
-	public static GameStateManager Instance {get; private set;}
+	private static GameStateManager Instance;
 
 	private void Awake()
 	{
@@ -27,7 +26,7 @@ public class GameStateManager : MonoBehaviour
 
 	private void Start()
 	{
-		Application.targetFrameRate = 120;
+		SetState(State.MainMenu);
 	}
 
 	public static void SetState(State newState)
@@ -68,5 +67,10 @@ public class GameStateManager : MonoBehaviour
 			yield return new WaitForSeconds(2);
 			SetState(State.LevelFailed);
 		}
+	}
+
+	public static void EndGame()
+	{
+		LevelCompleted();
 	}
 }

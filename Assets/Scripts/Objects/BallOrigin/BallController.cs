@@ -9,17 +9,19 @@ public class BallController : MonoBehaviour
 {
 	public BallEntity currentBall {get; private set;}
 
-	public BallRespawner respawner {get; private set;}
-	public BallControls controls {get; private set;}
-	public BallThrower thrower {get; private set;}
+	public BallControllerRespawner respawner {get; private set;}
+	public BallControllerControls controls {get; private set;}
+	public BallControllerThrower thrower {get; private set;}
+
+	public event Action<BallEntity> OnRespawned;
 
 	public void PreInitialize()
 	{
 		currentBall = GetComponentInChildren<BallEntity>();
 
-		respawner = GetComponent<BallRespawner>();
-		controls = GetComponent<BallControls>();
-		thrower = GetComponent<BallThrower>();
+		respawner = GetComponent<BallControllerRespawner>();
+		controls = GetComponent<BallControllerControls>();
+		thrower = GetComponent<BallControllerThrower>();
 
 		var components = GetComponents<BallControllerComponent>();
 		foreach (var comp in components)

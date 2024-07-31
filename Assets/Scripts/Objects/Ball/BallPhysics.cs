@@ -1,14 +1,25 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class BallPhysics : BallComponent
 {
+	private readonly Vector3 RESPAWN_VELOCITY = new Vector3(-10, 0, 0);
 	[SerializeField] private HoleCollisionSetter holeCollisionSetter;
 
 	public new Rigidbody rigidbody {get; private set;}
 
 	public bool isThrown {get; private set;}
+	public event Action OnGrabbed;
+	public event Action<Vector3> OnThrown;
+
+	public override void Init(BallEntity ball)
+	{
+		base.Init(ball);
+
+		ball.respawner.OnRespawned += Respawned;
+	}
 
 	private void Awake()
 	{
@@ -32,9 +43,18 @@ public class BallPhysics : BallComponent
 		rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
 	}
 
+	public void Grab()
+	{
+		isThrown = false;
+		
+		OnGrabbed?.Invoke();
+	}
+
 	public void Throw(Vector3 velocity)
 	{
 		isThrown = true;
+
+		OnThrown?.Invoke(velocity);
 
 		rigidbody.isKinematic = false;
 		rigidbody.useGravity = true;
@@ -42,5 +62,13 @@ public class BallPhysics : BallComponent
 		rigidbody.drag = 0;
 		rigidbody.angularDrag = 0;
 		rigidbody.constraints = RigidbodyConstraints.None;
+
+		rigidbody.angularVelocity = new Vector3(velocity.z * 5, 0, -velocity.x * 5);
+	}
+
+	private void Respawned()
+	{
+		SetAnchored();
+		rigidbody.velocity = RESPAWN_VELOCITY;
 	}
 }

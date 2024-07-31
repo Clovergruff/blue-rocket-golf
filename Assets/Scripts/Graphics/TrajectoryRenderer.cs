@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Net.WebSockets;
@@ -9,57 +10,71 @@ public class TrajectoryRenderer : MonoBehaviour
 	private readonly Vector3 DEFAULT_CURSOR_POSITION = new Vector3(0, -1000, 0);
 	private const int MAX_ITERATIONS = 500;
 
-	[SerializeField] private Vector3 velocity;
 	[SerializeField] private LineRenderer lineRenderer;
 	[SerializeField] private LayerMask groundMask;
 	[SerializeField] private LayerMask holeMask;
 	[SerializeField] private Transform cursor;
 
 	private Vector3[] _positions = new Vector3[MAX_ITERATIONS];
+	private Vector3 _velocity;
 	
 	private void Update()
 	{
 		int pointCount = 0;
 		Vector3 ballisticPosition = transform.position;
-		Vector3 ballisticVelocity = velocity;
+		Vector3 ballisticVelocity = _velocity;
 
-		LayerMask rayMask = groundMask;
+		// LayerMask rayMask = groundMask;
 		Vector3 cursorPosition = DEFAULT_CURSOR_POSITION;
 		Vector3 cursorNormal = Vector3.up;
+		bool holeFound = false;
+		bool surfaceFound = false;
 
 		_positions[0] = ballisticPosition;
 
 		for (int i = 1; i < MAX_ITERATIONS; i++)
 		{
-			var velDelta = ballisticVelocity * Time.fixedDeltaTime;
+			var velDelta = ballisticVelocity * Time.unscaledDeltaTime;
 
-			if (Physics.Raycast(ballisticPosition - velDelta, ballisticVelocity, out var hit, velDelta.magnitude, rayMask))
+			if (!holeFound)
 			{
-				if (hit.collider.TryGetComponent<HoleTrigger>(out _))
+				if (Physics.SphereCast(ballisticPosition, 0.5f, ballisticVelocity, out var hit, velDelta.magnitude, groundMask))
 				{
-					rayMask = holeMask;
-					if (Physics.Raycast(hit.point, ballisticVelocity, out var hit2, velDelta.magnitude, holeMask))
-					{
-						cursorPosition = hit2.point;
-						cursorNormal = hit2.normal;
-						break;
-					}
+						if (hit.collider.TryGetComponent<HoleTrigger>(out _))
+						{
+							holeFound = true;
+						}
+						else
+						{
+							ballisticPosition = hit.point;
+							cursorPosition = hit.point;
+							cursorNormal = hit.normal;
+							surfaceFound = true;
+							break;
+						}
 				}
-				else
+			}
+
+			if (holeFound)
+			{
+				if (Physics.SphereCast(ballisticPosition, 0.5f, ballisticVelocity, out var hit, velDelta.magnitude, holeMask))
 				{
+					ballisticPosition = hit.point;
 					cursorPosition = hit.point;
 					cursorNormal = hit.normal;
+					surfaceFound = true;
 					break;
 				}
 			}
 
 			pointCount++;
-			ballisticVelocity += Physics.gravity * Time.fixedDeltaTime;
+
 			ballisticPosition += velDelta;
+			ballisticVelocity += Physics.gravity * Time.unscaledDeltaTime;
 
 			_positions[i] = ballisticPosition;
 
-			if (ballisticPosition.y < -4)
+			if (surfaceFound || ballisticPosition.y < -4)
 				break;
 		}
 
@@ -71,6 +86,6 @@ public class TrajectoryRenderer : MonoBehaviour
 		cursor.rotation = Quaternion.Slerp(cursor.rotation, Quaternion.FromToRotation(Vector3.up, cursorNormal), 15 * Time.deltaTime);
 	}
 
-	public void SetVelocity(Vector3 velocity) => this.velocity = velocity;
+	public void SetVelocity(Vector3 velocity) => this._velocity = velocity;
 }
 

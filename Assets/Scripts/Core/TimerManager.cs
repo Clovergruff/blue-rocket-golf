@@ -6,7 +6,7 @@ using UnityEngine;
 public class TimerManager : MonoBehaviour
 	, IPreInitialized
 {
-	public static int spentTime = 0;
+	public static int remainingTime;
 	public static event Action<int> OnTimeUpdated;
 
 	private Coroutine _timerCoroutine;
@@ -22,7 +22,7 @@ public class TimerManager : MonoBehaviour
 
 		if (state == GameStateManager.State.Gameplay)
 		{
-			spentTime = 0;
+			remainingTime = GameplayConfig.Instance.defaultTime;
 			_timerCoroutine = StartCoroutine(TimerCoroutine());
 		}
 	}
@@ -40,8 +40,12 @@ public class TimerManager : MonoBehaviour
 	{
 		while (true)
 		{
-			spentTime++;
-			OnTimeUpdated?.Invoke(spentTime);
+			remainingTime--;
+			OnTimeUpdated?.Invoke(remainingTime);
+
+			if (remainingTime < 0)
+				GameStateManager.EndGame();
+				
 			yield return new WaitForSeconds(1);
 		}
 	}

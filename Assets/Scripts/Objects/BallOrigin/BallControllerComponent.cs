@@ -6,8 +6,5 @@ public abstract class BallControllerComponent : MonoBehaviour
 {
 	public BallController controller {get; private set;}
 
-	public virtual void Init(BallController owner)
-	{
-		this.controller = owner;
-	}
+	public virtual void Init(BallController owner) => this.controller = owner;
 }

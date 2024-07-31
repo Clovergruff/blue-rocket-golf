@@ -6,17 +6,19 @@ public class BallEntity : MonoBehaviour
 	public BallAnimator animator {get; private set;}
 	public BallHealth health {get; private set;}
 	public BallTriggerDetector triggerDetector {get; private set;}
-	public BallThrower thrower {get; private set;}
 	public BallGraphics graphics {get; private set;}
+	public BallRespawner respawner {get; private set;}
+	public BallHoleDetector holeDetector {get; private set;}
 
 	private void Awake()
 	{
 		physics = GetComponent<BallPhysics>();
 		animator = GetComponent<BallAnimator>();
 		health = GetComponent<BallHealth>();
-		thrower = GetComponent<BallThrower>();
 		graphics = GetComponent<BallGraphics>();
 		triggerDetector = GetComponent<BallTriggerDetector>();
+		respawner = GetComponent<BallRespawner>();
+		holeDetector = GetComponent<BallHoleDetector>();
 
 		var components = GetComponents<BallComponent>();
 		foreach (var comp in components)

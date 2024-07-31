@@ -6,8 +6,5 @@ public abstract class BallComponent : MonoBehaviour
 {
 	public BallEntity ball {get; private set;}
 
-	public virtual void Init(BallEntity ball)
-	{
-		this.ball = ball;
-	}
+	public virtual void Init(BallEntity ball) => this.ball = ball;
 }

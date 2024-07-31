@@ -10,6 +10,6 @@ public class HolePitTrigger : MonoBehaviour
 	private void Awake()
 	{
 		if (TryGetComponent<Trigger>(out var trigger))
-			trigger.OnBallEntered += ball => hole.BallEntered(ball);
+			trigger.OnBallEntered += ball => hole.ballDetector.BallEntered(ball);
 	}
 }

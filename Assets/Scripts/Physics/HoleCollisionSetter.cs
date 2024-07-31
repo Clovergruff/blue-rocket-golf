@@ -14,7 +14,7 @@ public class HoleCollisionSetter : MonoBehaviour
 
 	private void Reset()
 	{
-		groundRayLayers = LayerMask.GetMask("Default", "Ground");
+		groundRayLayers = LayerMask.GetMask("Default", "Ground", "Trigger");
 		collider = GetComponentInChildren<Collider>();
 	}
 
