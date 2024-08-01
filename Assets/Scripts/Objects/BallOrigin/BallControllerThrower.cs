@@ -26,6 +26,8 @@ public class BallControllerThrower : BallControllerComponent
 		controller.controls.OnReleased += Release;
 		controller.respawner.OnBallRespawned += BallRespawned;
 
+		GameStateManager.OnGameOver += CancelPulling;
+
 		trajectoryRenderer.gameObject.SetActive(false);
 	}
 
@@ -46,6 +48,13 @@ public class BallControllerThrower : BallControllerComponent
 			controller.currentBall.physics.rigidbody.velocity -= vel * 8 * Time.fixedDeltaTime;
 			rb.rotation = Quaternion.Slerp(rb.rotation, Quaternion.LookRotation(vel.normalized), 20 * Time.deltaTime);
 		}
+	}
+
+	private void CancelPulling()
+	{
+		trajectoryRenderer.gameObject.SetActive(false);
+		_pullVector = Vector2.zero;
+		_isPulling = false;
 	}
 
 	private void Drag(Vector2 delta)

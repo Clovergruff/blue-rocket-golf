@@ -9,6 +9,8 @@ public class BallHealth : BallComponent
 
 	public event Action OnDeath;
 
+	public static event Action<BallEntity> OnBallDestroyed;
+
 	private Coroutine _naturalDeathCoroutine;
 
 	public override void Init(BallEntity ball)
@@ -27,6 +29,7 @@ public class BallHealth : BallComponent
 	{
 		var gibs = Instantiate(gibPrefab, transform.position, transform.rotation);
 		OnDeath?.Invoke();
+		OnBallDestroyed?.Invoke(ball);
 
 		StopNaturalDeath();
 		gameObject.SetActive(false);

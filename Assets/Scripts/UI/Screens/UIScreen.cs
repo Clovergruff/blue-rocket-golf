@@ -6,10 +6,10 @@ using UnityEngine;
 [RequireComponent(typeof(CanvasGroup))]
 public abstract class UIScreen : MonoBehaviour
 {
-	private readonly Vector3 OPEN_CONTENT_SCALE = new Vector3(0.4f, 0.4f, 0.4f);
+	private readonly Vector3 OPEN_CONTENT_POSITION = new Vector2(0f, -100f);
 
 	[SerializeField] protected CanvasGroup canvasGroup;
-	[SerializeField] protected Transform frontContents;
+	[SerializeField] protected RectTransform frontContents;
 	public bool isModal = false;
 
 	public abstract void Init();
@@ -43,13 +43,13 @@ public abstract class UIScreen : MonoBehaviour
 
 			float t = 0;
 			float startAlpha = canvasGroup.alpha;
-			Vector3 startScale = frontContents ? frontContents.localScale : transform.localScale;
+			Vector3 startAnchoredPosition = frontContents ? frontContents.anchoredPosition : Vector2.zero;
 
 			while (t < 1)
 			{
 				canvasGroup.alpha = Mathf.LerpUnclamped(startAlpha, 0, UIScreenManager.Instance.curves.fadeOut.Evaluate(t));
 				if (frontContents)
-					frontContents.localScale = Vector3.LerpUnclamped(startScale, OPEN_CONTENT_SCALE, UIScreenManager.Instance.curves.scaleOut.Evaluate(t));
+					frontContents.anchoredPosition = Vector2.LerpUnclamped(startAnchoredPosition, OPEN_CONTENT_POSITION, UIScreenManager.Instance.curves.scaleOut.Evaluate(t));
 				t += Time.unscaledDeltaTime * 4;
 				yield return null;
 			}
@@ -57,7 +57,7 @@ public abstract class UIScreen : MonoBehaviour
 			gameObject.SetActive(false);
 			canvasGroup.alpha = 0;
 			if (frontContents)
-				frontContents.localScale = OPEN_CONTENT_SCALE;
+				frontContents.anchoredPosition = OPEN_CONTENT_POSITION;
 		}
 	}
 
@@ -83,19 +83,19 @@ public abstract class UIScreen : MonoBehaviour
 			{
 				canvasGroup.alpha = 0;
 				if (frontContents)
-					frontContents.localScale = OPEN_CONTENT_SCALE;
+					frontContents.anchoredPosition = OPEN_CONTENT_POSITION;
 				gameObject.SetActive(true);
 			}
 			
 			float t = 0;
 			float startAlpha = canvasGroup.alpha;
-			Vector3 startScale = frontContents ? frontContents.localScale : transform.localScale;
+			Vector3 startAnchoredPosition = frontContents ? frontContents.anchoredPosition : Vector2.zero;
 
 			while (t < 1)
 			{
 				canvasGroup.alpha = Mathf.LerpUnclamped(startAlpha, 1, UIScreenManager.Instance.curves.fadeIn.Evaluate(t));
 				if (frontContents)
-					frontContents.localScale = Vector3.LerpUnclamped(startScale, Vector3.one, UIScreenManager.Instance.curves.scaleIn.Evaluate(t));
+					frontContents.anchoredPosition = Vector2.LerpUnclamped(startAnchoredPosition, Vector3.one, UIScreenManager.Instance.curves.scaleIn.Evaluate(t));
 				t += Time.unscaledDeltaTime * 4;
 				yield return null;
 			}
@@ -103,7 +103,7 @@ public abstract class UIScreen : MonoBehaviour
 			canvasGroup.blocksRaycasts = true;	
 			canvasGroup.alpha = 1;
 			if (frontContents)
-				frontContents.localScale = Vector3.one;
+				frontContents.anchoredPosition = Vector3.zero;
 		}
 	}
 

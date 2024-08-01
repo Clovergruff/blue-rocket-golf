@@ -8,12 +8,11 @@ public class GameStateManager : MonoBehaviour
 	{
 		MainMenu,
 		Gameplay,
-		LevelComplete,
-		LevelFailed,
+		GameOver,
 	}
 	
 	public static event Action<State> OnStateChanged;
-	public static event Action OnLevelFinished;
+	public static event Action OnGameOver;
 	public static event Action OnLevelFailed;
 	public static State CurrentState {get; private set;}
 
@@ -40,37 +39,28 @@ public class GameStateManager : MonoBehaviour
 		SetState(State.Gameplay);
 	}
 
-	public static void LevelCompleted()
+	public static void GameOver()
 	{
-		// PlayerManager.currentPlayer.time = TimerManager.spentTime;
-
-		// UIScreenManager.Open<LevelCompleteScreen>();
-		UIScreenManager.CloseAll();
-		OnLevelFinished?.Invoke();
+		// UIScreenManager.CloseAll();
+		OnGameOver?.Invoke();
 
 		Instance.StartCoroutine(LevelCompleteSequence());
 		IEnumerator LevelCompleteSequence()
 		{
 			yield return new WaitForSeconds(2);
-			SetState(State.LevelComplete);
+			SetState(State.GameOver);
 		}
 	}
 
-	public static void LevelFailed()
+	public static void RestartGame()
 	{
 		UIScreenManager.CloseAll();
-		OnLevelFailed?.Invoke();
 
-		Instance.StartCoroutine(LevelFailedSequence());
-		IEnumerator LevelFailedSequence()
+		Instance.StartCoroutine(GameRestartSequence());
+		IEnumerator GameRestartSequence()
 		{
-			yield return new WaitForSeconds(2);
-			SetState(State.LevelFailed);
+			yield return new WaitForSeconds(1);
+			SetState(State.MainMenu);
 		}
-	}
-
-	public static void EndGame()
-	{
-		LevelCompleted();
 	}
 }

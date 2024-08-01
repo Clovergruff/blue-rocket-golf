@@ -23,6 +23,8 @@ public class BallGraphics : BallComponent
 
 		ball.physics.OnThrown += Thrown;
 		ball.respawner.OnRespawned += OnRespawned;
+		
+		GameStateManager.OnGameOver += SetReleased;
 	}
 
 	private void Thrown(Vector3 velocity)

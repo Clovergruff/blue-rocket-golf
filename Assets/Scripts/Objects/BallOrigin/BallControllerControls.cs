@@ -15,6 +15,7 @@ public class BallControllerControls : BallControllerComponent
 		base.Init(owner);
 
 		GameStateManager.OnStateChanged += GameStateChanged;		
+		GameStateManager.OnGameOver += UnsubscribeControls;		
 	}
 
 	private void GameStateChanged(GameStateManager.State state)
@@ -22,9 +23,12 @@ public class BallControllerControls : BallControllerComponent
 		if (state == GameStateManager.State.Gameplay)
 		{
 			SubscribeControls();
+			OnGrabbed?.Invoke();
 		}
 		else
+		{
 			UnsubscribeControls();
+		}
 	}
 
 	private void SubscribeControls()

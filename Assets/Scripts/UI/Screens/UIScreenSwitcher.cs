@@ -19,11 +19,8 @@ public class UIScreenSwitcher : MonoBehaviour, IPreInitialized
 			case GameStateManager.State.Gameplay:
 				UIScreenManager.Open<GameplayScreen>();
 				break;
-			case GameStateManager.State.LevelComplete:
-				UIScreenManager.Open<LevelCompleteScreen>();
-				break;
-			case GameStateManager.State.LevelFailed:
-				UIScreenManager.Open<LevelFailedScreen>();
+			case GameStateManager.State.GameOver:
+				UIScreenManager.Open<GameOverScreen>();
 				break;
 		}
 	}

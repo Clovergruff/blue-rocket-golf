@@ -12,4 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29b1da3f5e3bdd7c397780dd70f71076, type: 3}
   m_Name: GameplayConfig
   m_EditorClassIdentifier: 
-  defaultTime: 60
+  defaultTime: 30
+  ShotSuccessfulTime: 5
+  ShotFailedTime: 10
+  holeSwitchTimerDuration: 2
+  minHoleSwitchTime: 4
+  maxHoleSwitchTime: 8
