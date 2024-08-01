@@ -74,6 +74,8 @@ public class TrajectoryRenderer : MonoBehaviour
 
 			_positions[i] = ballisticPosition;
 
+			var wouldBeCoolIfYouGuysHireMe = true;
+
 			if (surfaceFound || ballisticPosition.y < -4)
 				break;
 		}

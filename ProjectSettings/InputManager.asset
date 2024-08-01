@@ -1046,7 +1046,7 @@ MonoBehaviour:
       m_Flags: 1
     - m_Name: Attack
       m_Type: 1
-      m_ExpectedControlType: Button
+      m_ExpectedControlType: 
       m_Id: 6c2ab1b8-8984-453a-af3d-a3c78ae1679a
       m_Processors: 
       m_Interactions: 
@@ -1238,14 +1238,6 @@ MonoBehaviour:
       m_Action: Attack
       m_Flags: 0
     - m_Name: 
-      m_Id: 886e731e-7071-4ae4-95c0-e61739dad6fd
-      m_Path: <Touchscreen>/primaryTouch/tap
-      m_Interactions: 
-      m_Processors: 
-      m_Groups: ;Touch
-      m_Action: Attack
-      m_Flags: 0
-    - m_Name: 
       m_Id: ee3d0cd2-254e-47a7-a8cb-bc94d9658c54
       m_Path: <Joystick>/trigger
       m_Interactions: 
@@ -1267,6 +1259,14 @@ MonoBehaviour:
       m_Interactions: 
       m_Processors: 
       m_Groups: Keyboard&Mouse
+      m_Action: Attack
+      m_Flags: 0
+    - m_Name: 
+      m_Id: 1f71d0e4-f53a-49d2-8385-3a31f18e4973
+      m_Path: <Touchscreen>/primaryTouch/press
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: ;Touch
       m_Action: Attack
       m_Flags: 0
     - m_Name: 
@@ -1715,19 +1715,19 @@ MonoBehaviour:
       m_Action: Click
       m_Flags: 0
     - m_Name: 
-      m_Id: 47c2a644-3ebc-4dae-a106-589b7ca75b59
-      m_Path: <Touchscreen>/touch*/press
-      m_Interactions: 
-      m_Processors: 
-      m_Groups: Touch
-      m_Action: Click
-      m_Flags: 0
-    - m_Name: 
       m_Id: bb9e6b34-44bf-4381-ac63-5aa15d19f677
       m_Path: <XRController>/trigger
       m_Interactions: 
       m_Processors: 
       m_Groups: XR
+      m_Action: Click
+      m_Flags: 0
+    - m_Name: 
+      m_Id: 12cea367-5688-4bd0-95f4-01cc21e519e4
+      m_Path: <Touchscreen>/touch*/Press
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: ;Touch
       m_Action: Click
       m_Flags: 0
     - m_Name: 
