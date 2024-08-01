@@ -3,7 +3,7 @@
     "m_SelectedProcess": {
         "deviceId": "ddc3d4b9",
         "name": "com.Gruffdev.BlueRocketGolf",
-        "processId": 24221,
+        "processId": 29291,
         "exited": false
     },
     "m_SelectedPriority": 0,
@@ -42,6 +42,54 @@
             "deviceId": "ddc3d4b9",
             "name": "com.Gruffdev.BlueRocketGolf",
             "processId": 24221,
+            "exited": false
+        },
+        {
+            "deviceId": "ddc3d4b9",
+            "name": "com.Gruffdev.BlueRocketGolf",
+            "processId": 24618,
+            "exited": false
+        },
+        {
+            "deviceId": "ddc3d4b9",
+            "name": "com.Gruffdev.BlueRocketGolf",
+            "processId": 25409,
+            "exited": false
+        },
+        {
+            "deviceId": "ddc3d4b9",
+            "name": "com.Gruffdev.BlueRocketGolf",
+            "processId": 26036,
+            "exited": false
+        },
+        {
+            "deviceId": "ddc3d4b9",
+            "name": "com.Gruffdev.BlueRocketGolf",
+            "processId": 26383,
+            "exited": false
+        },
+        {
+            "deviceId": "ddc3d4b9",
+            "name": "com.Gruffdev.BlueRocketGolf",
+            "processId": 27168,
+            "exited": false
+        },
+        {
+            "deviceId": "ddc3d4b9",
+            "name": "com.Gruffdev.BlueRocketGolf",
+            "processId": 28005,
+            "exited": false
+        },
+        {
+            "deviceId": "ddc3d4b9",
+            "name": "com.Gruffdev.BlueRocketGolf",
+            "processId": 28690,
+            "exited": false
+        },
+        {
+            "deviceId": "ddc3d4b9",
+            "name": "com.Gruffdev.BlueRocketGolf",
+            "processId": 29291,
             "exited": false
         }
     ],
